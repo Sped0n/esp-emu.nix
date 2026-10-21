@@ -1,0 +1,44 @@
+name: Update esp-emu
+
+on:
+  schedule:
+    # 08:00 GMT+8 = 00:00 UTC.
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-release
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Update version and release hashes
+        id: update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/update-release.py
+
+      - name: Run flake check
+        if: steps.update.outputs.updated == 'true'
+        run: |
+          nix flake check --all-systems --no-build
+          nix flake check -L
+
+      - name: Commit update
+        if: steps.update.outputs.updated == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          file_pattern: packages/esp-emu/default.nix
+          commit_message: 'packages/esp-emu: upgrade to ${{ steps.update.outputs.version }}'
