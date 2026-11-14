@@ -8,15 +8,15 @@ let
   sources = {
     x86_64-linux = {
       target = "x86_64-unknown-linux-gnu";
-      hash = "sha256-K54VdHDtuLAxZ5llUCksbfjMZxYCXrrYkn25UNeTFBc=";
+      hash = "sha256-u8Bby+4pisZgcM0W1ojeUXIcgorUp384KrTUsl5vQrU=";
     };
     aarch64-linux = {
       target = "aarch64-unknown-linux-gnu";
-      hash = "sha256-P8qFTfjR/C/HPjfzpOnbIUFm0OB9/b1HAgGf2dzDFG8=";
+      hash = "sha256-ubeHm/0Tr/BnTyjFTF9AMWpfGmNgVnirLQhfMFUs+pY=";
     };
     aarch64-darwin = {
       target = "aarch64-apple-darwin";
-      hash = "sha256-qwJSS9KGzoRXdjlzHQ5I1iPOm+ZeRdnhJG3SIMFHYQI=";
+      hash = "sha256-0YD3atapf4EcEd2BC0oMfdf1fwrNcMpXDwu2SbUz3ts=";
     };
   };
   source =
@@ -25,7 +25,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "esp-emu";
-  version = "0.51.0";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/espressif/esp-emulator/releases/download/v${finalAttrs.version}/esp-emu-${finalAttrs.version}-${source.target}.tar.gz";
